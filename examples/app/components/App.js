@@ -3,7 +3,6 @@ import Scrollbar from "react-scrollbars-custom";
 import Body      from "./Body";
 import Footer    from "./Footer";
 import Head      from "./Head";
-import Mayhem    from "./Mayhem";
 
 const authorName = "Anton Zinovyev";
 const authorLink = "https://github.com/xobotyi";
@@ -16,7 +15,6 @@ export default class App extends React.Component
         return <Scrollbar defaultStyles={ false } contentClassName="AppContent">
             <Head packageName={ packageName } packageLink={ packageLink } />
             { window.location.hash !== '#benchmark' && <Body packageName={ packageName } packageLink={ packageLink } /> }
-            { window.location.hash === '#benchmark' && <Mayhem /> }
             <Footer authorName={ authorName } authorLink={ authorLink } packageName={ packageName } packageLink={ packageLink } />
         </Scrollbar>;
     }

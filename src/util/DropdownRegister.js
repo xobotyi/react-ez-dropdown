@@ -1,40 +1,67 @@
 function DropdownRegister() {
+    /**
+     * @typedef {Object} DropdownContentProperties
+     * @property {boolean} isOpened
+     * @property {boolean} removeOnHide
+     * @property {Array} triggers
+     */
+
+    /**
+     * @typedef {Object} DropdownContentState
+     * @property {boolean} isOpened
+     * @property {Array} triggers
+     */
+
+    /**
+     * @typedef {Object} DropdownContent
+     * @property {function} setState
+     * @property {DropdownContentProperties} props
+     * @property {DropdownContentState} state
+     */
+
+    /**
+     * @type {DropdownContent[]}
+     */
     const registeredDropdowns = [];
-    const openedDropdowns = [];
+
+    /**
+     * @type {null|DropdownContent}
+     */
+    let openedDropdown = null;
 
     /**
      * Return list of registered dropdowns.
      *
-     * @return {*[]}
+     * @return {DropdownContent[]}
      */
     this.getRegistered = () => {return [...registeredDropdowns];};
 
     /**
-     * Return  list of opened dropdowns.
+     * Return opened dropdown.
      *
-     * @return {*[]}
+     * @return {DropdownContent}
      */
-    this.getOpened = () => {return [...openedDropdowns];};
+    this.getOpened = () => {return openedDropdown;};
 
     /**
      * Add instance to register if it not presented there.
      *
-     * @param dropdown Dropdown instance
-     * @return {DropdownRegister}
+     * @param {DropdownContent} dropdown Dropdown instance
+     * @return {number} count of registered dropdowns
      */
     this.registerDropdown = (dropdown) => {
         if (registeredDropdowns.indexOf(dropdown) === -1) {
             registeredDropdowns.push(dropdown);
         }
 
-        return this;
+        return registeredDropdowns.length;
     };
 
     /**
      * Remove an instance from register.
      *
-     * @param dropdown Dropdown instance
-     * @return {DropdownRegister}
+     * @param {DropdownContent} dropdown Dropdown instance
+     * @return {number} count of registered dropdowns left
      */
     this.unregisterDropdown = (dropdown) => {
         const index = registeredDropdowns.indexOf(dropdown);
@@ -43,22 +70,46 @@ function DropdownRegister() {
             registeredDropdowns.splice(index, 1);
         }
 
-        return this;
+        return registeredDropdowns.length;
     };
 
-    this.markOpened = (dropdown) => {
-        if (openedDropdowns.indexOf(dropdown) === -1) {
-            openedDropdowns.push(dropdown);
+    /**
+     * Open given dropdown if it wasn't
+     *
+     * @param {DropdownContent|null} dropdown
+     * @return {DropdownRegister}
+     */
+    this.setOpened = (dropdown) => {
+        if (openedDropdown !== dropdown) {
+            openedDropdown && openedDropdown.setState({
+                                                          ...openedDropdown.state,
+                                                          opened: false,
+                                                      });
+
+            openedDropdown = dropdown;
+            dropdown.setState({
+                                  ...dropdown.state,
+                                  opened: true,
+                              });
         }
 
         return this;
     };
 
-    this.unmarkOpened = (dropdown) => {
-        const index = openedDropdowns.indexOf(dropdown);
+    /**
+     * Close given dropdown if it was opened
+     *
+     * @param dropdown
+     * @return {DropdownRegister}
+     */
+    this.unsetOpened = (dropdown) => {
+        if (dropdown === openedDropdown) {
+            openedDropdown = null;
 
-        if (index !== -1) {
-            openedDropdowns.splice(index, 1);
+            dropdown.setState({
+                                  ...dropdown.state,
+                                  opened: false,
+                              });
         }
 
         return this;

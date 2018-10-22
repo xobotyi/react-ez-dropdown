@@ -18,8 +18,8 @@ describe("DropdownRegister", () => {
 
         expect(DropdownRegister.getRegistered().length).toBe(1);
     });
-    it("should register dropdown as opened on `.markOpened()`", () => {
-        DropdownRegister.markOpened(dropdownInstance1);
+    it("should register dropdown as opened on `.setOpened()`", () => {
+        DropdownRegister.setOpened(dropdownInstance1);
 
         expect(DropdownRegister.getRegistered().length).toBe(1);
     });
@@ -29,8 +29,8 @@ describe("DropdownRegister", () => {
 
         expect(DropdownRegister.getRegistered().length).toBe(1);
     });
-    it("should NOT register dropdown as opened on `.markOpened()`", () => {
-        DropdownRegister.markOpened(dropdownInstance1);
+    it("should NOT register dropdown as opened on `.setOpened()`", () => {
+        DropdownRegister.setOpened(dropdownInstance1);
 
         expect(DropdownRegister.getRegistered().length).toBe(1);
     });
@@ -40,8 +40,8 @@ describe("DropdownRegister", () => {
 
         expect(DropdownRegister.getRegistered().length).toBe(0);
     });
-    it("should unregister marked opened dropdown on `.unmarkOpened()`", () => {
-        DropdownRegister.unmarkOpened(dropdownInstance1);
+    it("should unregister marked opened dropdown on `.unsetOpened()`", () => {
+        DropdownRegister.unsetOpened(dropdownInstance1);
 
         expect(DropdownRegister.getRegistered().length).toBe(0);
     });
