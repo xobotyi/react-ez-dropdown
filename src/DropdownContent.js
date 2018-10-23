@@ -87,14 +87,20 @@ export default class DropdownContent extends React.Component
         this.triggers.length && this.triggers.forEach(trigger => {
             trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened);
         });
+
+        return this;
     };
 
     open = () => {
         DropdownRegister.setOpened(this);
+
+        return this;
     };
 
     close = () => {
         DropdownRegister.unsetOpened(this);
+
+        return this;
     };
 
     toggle = (forced = null) => {
@@ -104,12 +110,16 @@ export default class DropdownContent extends React.Component
         else {
             forced ? this.open() : this.close();
         }
+
+        return this;
     };
 
     bindTriggers = (triggers) => {
         triggers.forEach(trigger => {
             this.triggers.indexOf(trigger) === -1 && this.triggers.push(trigger);
         });
+
+        return this;
     };
 
     unbindTriggers = (triggers) => {
@@ -118,6 +128,8 @@ export default class DropdownContent extends React.Component
 
             i !== -1 && this.triggers.splice(i, 1);
         });
+
+        return this;
     };
 
     render() {

@@ -10,7 +10,6 @@ export default class DropdownTrigger extends React.Component
         tagName:   PropTypes.string,
 
         disabled: PropTypes.bool,
-        drop:     PropTypes.bool,
 
         dropdowns: PropTypes.arrayOf(PropTypes.element),
     };
@@ -41,6 +40,8 @@ export default class DropdownTrigger extends React.Component
         dropdowns.forEach(dropdown => {
             this.dropdowns.indexOf(dropdown) === -1 && this.dropdowns.push(dropdown);
         });
+
+        return this;
     };
 
     unbindDropdowns = (dropdowns) => {
@@ -48,10 +49,14 @@ export default class DropdownTrigger extends React.Component
             let i = this.dropdowns.indexOf(dropdown);
             i !== -1 && this.dropdowns.splice(i, 1);
         });
+
+        return this;
     };
 
     handleClick = () => {
         this.dropdowns.forEach(dropdown => dropdown.toggle());
+
+        return true;
     };
 
     render() {
