@@ -73,6 +73,12 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(DropdownContent).call(this, props));
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "markTriggers", function () {
+      _this.triggers.length && _this.triggers.forEach(function (trigger) {
+        trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", _this.state.opened);
+      });
+    });
+
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "open", function () {
       _DropdownRegister.default.setOpened(_assertThisInitialized(_assertThisInitialized(_this)));
     });
@@ -116,6 +122,7 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.triggers && this.bindTriggers(this.props.triggers);
+      this.markTriggers();
 
       if (_DropdownRegister.default.registerDropdown(this) === 1) {
         document.body.addEventListener("click", onWindowClick, {
@@ -147,6 +154,11 @@ function (_React$Component) {
           passive: true
         });
       }
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      this.markTriggers();
     }
   }, {
     key: "render",

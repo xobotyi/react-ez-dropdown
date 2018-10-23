@@ -56,6 +56,7 @@ export default class DropdownContent extends React.Component
 
     componentDidMount() {
         this.props.triggers && this.bindTriggers(this.props.triggers);
+        this.markTriggers();
 
         if (DropdownRegister.registerDropdown(this) === 1) {
             document.body.addEventListener("click", onWindowClick, {passive: true});
@@ -77,6 +78,16 @@ export default class DropdownContent extends React.Component
             document.body.removeEventListener("touch", onWindowClick, {passive: true});
         }
     }
+
+    componentDidUpdate() {
+        this.markTriggers();
+    }
+
+    markTriggers = () => {
+        this.triggers.length && this.triggers.forEach(trigger => {
+            trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened);
+        });
+    };
 
     open = () => {
         DropdownRegister.setOpened(this);

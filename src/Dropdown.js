@@ -16,8 +16,10 @@ export default class Dropdown extends React.Component
                                            {
                                                dropdowns: boundDropdowns,
                                                ref:       (ref) => {
+                                                   if (!ref) { return; }
+
                                                    ref.bindDropdowns(boundDropdowns);
-                                                   boundDropdowns.forEach(dropdown => dropdown.bindTriggers([ref]));
+                                                   boundDropdowns.forEach(dropdown => dropdown && dropdown.bindTriggers([ref]));
                                                    boundTriggers.push(ref);
                                                },
                                            });
@@ -27,8 +29,10 @@ export default class Dropdown extends React.Component
                                            {
                                                triggers: boundTriggers,
                                                ref:      (ref) => {
+                                                   if (!ref) { return; }
+
                                                    ref.bindTriggers(boundTriggers);
-                                                   boundTriggers.forEach(trigger => trigger.bindDropdowns([ref]));
+                                                   boundTriggers.forEach(trigger => trigger && trigger.bindDropdowns([ref]));
                                                    boundDropdowns.push(ref);
                                                },
                                            });

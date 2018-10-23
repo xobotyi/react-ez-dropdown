@@ -54,10 +54,14 @@ function (_React$Component) {
           child = _react.default.cloneElement(child, {
             dropdowns: boundDropdowns,
             ref: function ref(_ref) {
+              if (!_ref) {
+                return;
+              }
+
               _ref.bindDropdowns(boundDropdowns);
 
               boundDropdowns.forEach(function (dropdown) {
-                return dropdown.bindTriggers([_ref]);
+                return dropdown && dropdown.bindTriggers([_ref]);
               });
               boundTriggers.push(_ref);
             }
@@ -66,10 +70,14 @@ function (_React$Component) {
           child = _react.default.cloneElement(child, {
             triggers: boundTriggers,
             ref: function ref(_ref2) {
+              if (!_ref2) {
+                return;
+              }
+
               _ref2.bindTriggers(boundTriggers);
 
               boundTriggers.forEach(function (trigger) {
-                return trigger.bindDropdowns([_ref2]);
+                return trigger && trigger.bindDropdowns([_ref2]);
               });
               boundDropdowns.push(_ref2);
             }
