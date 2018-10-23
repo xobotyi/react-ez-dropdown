@@ -38,7 +38,7 @@ export default class DropdownTrigger extends React.Component
 
     bindDropdowns = (dropdowns) => {
         dropdowns.forEach(dropdown => {
-            this.dropdowns.indexOf(dropdown) === -1 && this.dropdowns.push(dropdown);
+            dropdown && this.dropdowns.indexOf(dropdown) === -1 && this.dropdowns.push(dropdown);
         });
 
         return this;
