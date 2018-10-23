@@ -31,6 +31,7 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
@@ -66,7 +67,7 @@
     "webpack-dev-server": "^3.1.9"
   },
   "scripts": {
-    "build": "rimraf ./dist && babel src -d dist --ignore \"node-modules/**\" --presets \"@babel/preset-react,@babel/preset-env\" --plugins \"@babel/plugin-proposal-class-properties\"",
+    "build": "rimraf ./dist && babel src -d dist --ignore \"node-modules/**\" --presets \"@babel/preset-react,@babel/preset-env\" --plugins \"@babel/plugin-proposal-class-properties,@babel/plugin-proposal-export-default-from\"",
     "push-codacy-coverage": "cat ./coverage/lcov.info | codacy-coverage -p .",
     "examples": "cd ./examples && webpack-dev-server --mode development --hot --colors --progress --config webpack.config.dev.js",
     "examples:build": "cd ./examples && rimraf ./static && cross-env NODE_ENV=production webpack --colors --progress --config webpack.config.prod.js",
