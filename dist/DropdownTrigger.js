@@ -51,7 +51,7 @@ function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "bindDropdowns", function (dropdowns) {
       dropdowns.forEach(function (dropdown) {
-        _this.dropdowns.indexOf(dropdown) === -1 && _this.dropdowns.push(dropdown);
+        dropdown && _this.dropdowns.indexOf(dropdown) === -1 && _this.dropdowns.push(dropdown);
       });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });

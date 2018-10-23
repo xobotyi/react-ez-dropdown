@@ -106,7 +106,7 @@ function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "bindTriggers", function (triggers) {
       triggers.forEach(function (trigger) {
-        _this.triggers.indexOf(trigger) === -1 && _this.triggers.push(trigger);
+        trigger && _this.triggers.indexOf(trigger) === -1 && _this.triggers.push(trigger);
       });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });

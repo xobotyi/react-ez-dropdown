@@ -88,7 +88,11 @@ function DropdownRegister() {
     var index = registeredDropdowns.indexOf(dropdown);
 
     if (index !== -1) {
+      dropdown.setState(_objectSpread({}, openedDropdown.state, {
+        opened: false
+      }));
       registeredDropdowns.splice(index, 1);
+      openedDropdown === dropdown && (openedDropdown = null);
     }
 
     return registeredDropdowns.length;
