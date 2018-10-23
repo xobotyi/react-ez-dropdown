@@ -3,7 +3,6 @@
   "description": "The best React custom scrollbars component",
   "version": "0.1.3",
   "main": "dist/index.js",
-  "module": "src/index.js",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
