@@ -1,4 +1,4 @@
-import {Component, CSSProperties, SFC} from "react";
+import {Component} from "react";
 
 
 export interface DropdownTriggerProps {

@@ -53,6 +53,7 @@ function (_React$Component) {
       dropdowns.forEach(function (dropdown) {
         _this.dropdowns.indexOf(dropdown) === -1 && _this.dropdowns.push(dropdown);
       });
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "unbindDropdowns", function (dropdowns) {
@@ -61,12 +62,15 @@ function (_React$Component) {
 
         i !== -1 && _this.dropdowns.splice(i, 1);
       });
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleClick", function () {
       _this.dropdowns.forEach(function (dropdown) {
         return dropdown.toggle();
       });
+
+      return true;
     });
 
     _this.dropdowns = [];
@@ -121,7 +125,6 @@ _defineProperty(DropdownTrigger, "propTypes", {
   className: _propTypes.default.string,
   tagName: _propTypes.default.string,
   disabled: _propTypes.default.bool,
-  drop: _propTypes.default.bool,
   dropdowns: _propTypes.default.arrayOf(_propTypes.default.element)
 });
 

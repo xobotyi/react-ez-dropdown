@@ -77,14 +77,19 @@ function (_React$Component) {
       _this.triggers.length && _this.triggers.forEach(function (trigger) {
         trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", _this.state.opened);
       });
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "open", function () {
       _DropdownRegister.default.setOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "close", function () {
       _DropdownRegister.default.unsetOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "toggle", function () {
@@ -95,12 +100,15 @@ function (_React$Component) {
       } else {
         forced ? _this.open() : _this.close();
       }
+
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "bindTriggers", function (triggers) {
       triggers.forEach(function (trigger) {
         _this.triggers.indexOf(trigger) === -1 && _this.triggers.push(trigger);
       });
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "unbindTriggers", function (triggers) {
@@ -109,6 +117,7 @@ function (_React$Component) {
 
         i !== -1 && _this.triggers.splice(i, 1);
       });
+      return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _this.triggers = [];
