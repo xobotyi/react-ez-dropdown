@@ -1,3 +1,3 @@
-export { default as DropdownContent } from "./DropdownContent";
-export { default as DropdownTrigger } from "./DropdownTrigger";
-export { default as Dropdown }        from "./Dropdown";
+export DropdownContent  from "./DropdownContent";
+export DropdownTrigger  from "./DropdownTrigger";
+export Dropdown         from "./Dropdown";
