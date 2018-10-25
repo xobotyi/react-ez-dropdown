@@ -67,13 +67,8 @@ function DropdownRegister() {
         const index = registeredDropdowns.indexOf(dropdown);
 
         if (index !== -1) {
-            dropdown.setState({
-                                  ...openedDropdown.state,
-                                  opened: false,
-                              });
-
             registeredDropdowns.splice(index, 1);
-            openedDropdown === dropdown && (openedDropdown = null);
+            openedDropdown === dropdown && this.setOpened(null);
         }
 
         return registeredDropdowns.length;
@@ -93,10 +88,10 @@ function DropdownRegister() {
                                                       });
 
             openedDropdown = dropdown;
-            dropdown.setState({
-                                  ...dropdown.state,
-                                  opened: true,
-                              });
+            dropdown && dropdown.setState({
+                                              ...dropdown.state,
+                                              opened: true,
+                                          });
         }
 
         return this;

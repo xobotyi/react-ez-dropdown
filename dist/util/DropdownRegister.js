@@ -88,11 +88,8 @@ function DropdownRegister() {
     var index = registeredDropdowns.indexOf(dropdown);
 
     if (index !== -1) {
-      dropdown.setState(_objectSpread({}, openedDropdown.state, {
-        opened: false
-      }));
       registeredDropdowns.splice(index, 1);
-      openedDropdown === dropdown && (openedDropdown = null);
+      openedDropdown === dropdown && _this.setOpened(null);
     }
 
     return registeredDropdowns.length;
@@ -111,7 +108,7 @@ function DropdownRegister() {
         opened: false
       }));
       openedDropdown = dropdown;
-      dropdown.setState(_objectSpread({}, dropdown.state, {
+      dropdown && dropdown.setState(_objectSpread({}, dropdown.state, {
         opened: true
       }));
     }
