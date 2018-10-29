@@ -21,7 +21,9 @@
     "component",
     "custom"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "prettier": "^1.14.3"
+  },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
     "react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0",
@@ -74,6 +76,9 @@
     "test": "cross-env NODE_ENV=test karma start",
     "test:watch": "cross-env NODE_ENV=test karma start --auto-watch --no-single-run",
     "test:coverage": "cross-env NODE_ENV=test COVERAGE=true karma start --single-run",
+    "format": "prettier --write src/**/*.js tests/**/*.js examples/**/*.js",
+    "format:list": "prettier -l src/**/*.js tests/**/*.js examples/**/*.js",
+    "precommit": "npm run format && git add",
     "prepublishOnly": "npm test && npm run build"
   }
 }
