@@ -3,20 +3,24 @@ import React            from "react";
 import DropdownRegister from "./util/DropdownRegister";
 
 const onWindowClick = (event) => {
-    let dropdown = DropdownRegister.getOpened();
+    const openedDropdowns = DropdownRegister.getOpened();
 
-    if (dropdown) {
-        // check if dropdown itself has been clicked
-        if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
-            return true;
+    if (openedDropdowns.length) {
+        for (let i = openedDropdowns.length - 1; i >= 0; i--) {
+            const dropdown = openedDropdowns[i];
+
+            // check if dropdown itself or its content has been clicked
+            if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
+                continue;
+            }
+
+            // check if dropdown's trigger has been clicked
+            if (dropdown.triggers.length && dropdown.triggers.some(trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target))) {
+                continue;
+            }
+
+            dropdown.close();
         }
-
-        // check if dropdown's trigger has been clicked
-        if (dropdown.triggers.length && dropdown.triggers.some(trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target))) {
-            return true;
-        }
-
-        DropdownRegister.unsetOpened(dropdown);
     }
 
     return true;
@@ -41,7 +45,7 @@ export default class DropdownContent extends React.Component
     static defaultProps = {
         tagName:      "div",
         opened:       false,
-        removeOnHide: true,
+        removeOnHide: false,
     };
 
     constructor(props) {
@@ -91,14 +95,22 @@ export default class DropdownContent extends React.Component
         return this;
     };
 
-    open = () => {
-        DropdownRegister.setOpened(this);
+    open = (noRegister = false) => {
+        this.setState({
+                          ...this.state,
+                          opened: true,
+                      });
+        !noRegister && DropdownRegister.setOpened(this);
 
         return this;
     };
 
-    close = () => {
-        DropdownRegister.unsetOpened(this);
+    close = (noRegister = false) => {
+        this.setState({
+                          ...this.state,
+                          opened: false,
+                      });
+        !noRegister && DropdownRegister.unsetOpened(this);
 
         return this;
     };
@@ -152,6 +164,7 @@ export default class DropdownContent extends React.Component
                     ...props,
                     className: contentClassNames,
                     ref:       (ref) => {this.contentElement = ref;},
+                    style:     {...(!removeOnHide && {display: opened ? null : "none"})},
                 },
         );
     }

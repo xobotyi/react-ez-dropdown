@@ -14,7 +14,8 @@ function DropdownRegister() {
 
     /**
      * @typedef {Object} DropdownContent
-     * @property {function} setState
+     * @property {function} open
+     * @property {function} close
      * @property {DropdownContentProperties} props
      * @property {DropdownContentState} state
      */
@@ -25,9 +26,9 @@ function DropdownRegister() {
     const registeredDropdowns = [];
 
     /**
-     * @type {null|DropdownContent}
+     * @type {DropdownContent[]}
      */
-    let openedDropdown = null;
+    let openedDropdowns = [];
 
     /**
      * Return list of registered dropdowns.
@@ -39,9 +40,9 @@ function DropdownRegister() {
     /**
      * Return opened dropdown.
      *
-     * @return {DropdownContent}
+     * @return {DropdownContent[]}
      */
-    this.getOpened = () => {return openedDropdown;};
+    this.getOpened = () => {return [...openedDropdowns];};
 
     /**
      * Add instance to register if it not presented there.
@@ -68,7 +69,7 @@ function DropdownRegister() {
 
         if (index !== -1) {
             registeredDropdowns.splice(index, 1);
-            openedDropdown === dropdown && this.setOpened(null);
+            this.unsetOpened(dropdown);
         }
 
         return registeredDropdowns.length;
@@ -81,17 +82,17 @@ function DropdownRegister() {
      * @return {DropdownRegister}
      */
     this.setOpened = (dropdown) => {
-        if (openedDropdown !== dropdown) {
-            openedDropdown && openedDropdown.setState({
-                                                          ...openedDropdown.state,
-                                                          opened: false,
-                                                      });
+        if (openedDropdowns[openedDropdowns.length - 1] !== dropdown) {
+            for (let i = openedDropdowns.length - 1; i >= 0; i--) {
+                if (openedDropdowns[i].contentElement.contains(dropdown.contentElement)) {
+                    break;
+                }
 
-            openedDropdown = dropdown;
-            dropdown && dropdown.setState({
-                                              ...dropdown.state,
-                                              opened: true,
-                                          });
+                openedDropdowns[i].close(true);
+            }
+
+            openedDropdowns.push(dropdown);
+            dropdown && dropdown.open(true);
         }
 
         return this;
@@ -104,13 +105,13 @@ function DropdownRegister() {
      * @return {DropdownRegister}
      */
     this.unsetOpened = (dropdown) => {
-        if (dropdown === openedDropdown) {
-            openedDropdown = null;
+        let dropdownPos = openedDropdowns.indexOf(dropdown);
 
-            dropdown.setState({
-                                  ...dropdown.state,
-                                  opened: false,
-                              });
+        if (dropdownPos > -1) {
+            for (let i = openedDropdowns.length - 1; i >= dropdownPos; i--) {
+                openedDropdowns[i].close(true);
+                openedDropdowns.splice(i, 1);
+            }
         }
 
         return this;

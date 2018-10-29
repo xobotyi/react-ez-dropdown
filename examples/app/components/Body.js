@@ -12,8 +12,12 @@ export default class Head extends React.Component
 
             <Dropdown>
                 <DropdownTrigger>Toggle dropdown</DropdownTrigger>
-                <DropdownTrigger>Toggle dropdown 2</DropdownTrigger>
-                <DropdownContent>helloWorld</DropdownContent>
+                <DropdownContent className="test1">
+                    <Dropdown>
+                        <DropdownTrigger>Toggle dropdown</DropdownTrigger>
+                        <DropdownContent removeOnHide={ false }>helloWorld</DropdownContent>
+                    </Dropdown>
+                </DropdownContent>
             </Dropdown>
         </div>;
     }
