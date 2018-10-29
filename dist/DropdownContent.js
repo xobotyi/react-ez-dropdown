@@ -15,11 +15,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -40,22 +40,25 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var onWindowClick = function onWindowClick(event) {
-  var dropdown = _DropdownRegister.default.getOpened();
+  var openedDropdowns = _DropdownRegister.default.getOpened();
 
-  if (dropdown) {
-    // check if dropdown itself has been clicked
-    if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
-      return true;
-    } // check if dropdown's trigger has been clicked
+  if (openedDropdowns.length) {
+    for (var i = openedDropdowns.length - 1; i >= 0; i--) {
+      var dropdown = openedDropdowns[i]; // check if dropdown itself or its content has been clicked
+
+      if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
+        continue;
+      } // check if dropdown's trigger has been clicked
 
 
-    if (dropdown.triggers.length && dropdown.triggers.some(function (trigger) {
-      return event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target);
-    })) {
-      return true;
+      if (dropdown.triggers.length && dropdown.triggers.some(function (trigger) {
+        return event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target);
+      })) {
+        continue;
+      }
+
+      dropdown.close();
     }
-
-    _DropdownRegister.default.unsetOpened(dropdown);
   }
 
   return true;
@@ -81,14 +84,24 @@ function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "open", function () {
-      _DropdownRegister.default.setOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+      var noRegister = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
+      _this.setState(_objectSpread({}, _this.state, {
+        opened: true
+      }));
+
+      !noRegister && _DropdownRegister.default.setOpened(_assertThisInitialized(_assertThisInitialized(_this)));
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "close", function () {
-      _DropdownRegister.default.unsetOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+      var noRegister = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
+      _this.setState(_objectSpread({}, _this.state, {
+        opened: false
+      }));
+
+      !noRegister && _DropdownRegister.default.unsetOpened(_assertThisInitialized(_assertThisInitialized(_this)));
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
@@ -194,7 +207,10 @@ function (_React$Component) {
         className: contentClassNames,
         ref: function ref(_ref) {
           _this3.contentElement = _ref;
-        }
+        },
+        style: _objectSpread({}, !removeOnHide && {
+          display: opened ? null : "none"
+        })
       }));
     }
   }]);
@@ -219,5 +235,5 @@ _defineProperty(DropdownContent, "propTypes", {
 _defineProperty(DropdownContent, "defaultProps", {
   tagName: "div",
   opened: false,
-  removeOnHide: true
+  removeOnHide: false
 });

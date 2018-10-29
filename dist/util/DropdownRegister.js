@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.createDropdownRegister = createDropdownRegister;
 exports.default = void 0;
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function DropdownRegister() {
   var _this = this;
 
@@ -28,7 +24,8 @@ function DropdownRegister() {
 
   /**
    * @typedef {Object} DropdownContent
-   * @property {function} setState
+   * @property {function} open
+   * @property {function} close
    * @property {DropdownContentProperties} props
    * @property {DropdownContentState} state
    */
@@ -38,10 +35,10 @@ function DropdownRegister() {
    */
   var registeredDropdowns = [];
   /**
-   * @type {null|DropdownContent}
+   * @type {DropdownContent[]}
    */
 
-  var openedDropdown = null;
+  var openedDropdowns = [];
   /**
    * Return list of registered dropdowns.
    *
@@ -54,12 +51,12 @@ function DropdownRegister() {
   /**
    * Return opened dropdown.
    *
-   * @return {DropdownContent}
+   * @return {DropdownContent[]}
    */
 
 
   this.getOpened = function () {
-    return openedDropdown;
+    return openedDropdowns.concat();
   };
   /**
    * Add instance to register if it not presented there.
@@ -89,7 +86,8 @@ function DropdownRegister() {
 
     if (index !== -1) {
       registeredDropdowns.splice(index, 1);
-      openedDropdown === dropdown && _this.setOpened(null);
+
+      _this.unsetOpened(dropdown);
     }
 
     return registeredDropdowns.length;
@@ -103,14 +101,17 @@ function DropdownRegister() {
 
 
   this.setOpened = function (dropdown) {
-    if (openedDropdown !== dropdown) {
-      openedDropdown && openedDropdown.setState(_objectSpread({}, openedDropdown.state, {
-        opened: false
-      }));
-      openedDropdown = dropdown;
-      dropdown && dropdown.setState(_objectSpread({}, dropdown.state, {
-        opened: true
-      }));
+    if (openedDropdowns[openedDropdowns.length - 1] !== dropdown) {
+      for (var i = openedDropdowns.length - 1; i >= 0; i--) {
+        if (openedDropdowns[i].contentElement.contains(dropdown.contentElement)) {
+          break;
+        }
+
+        openedDropdowns[i].close(true);
+      }
+
+      openedDropdowns.push(dropdown);
+      dropdown && dropdown.open(true);
     }
 
     return _this;
@@ -124,11 +125,13 @@ function DropdownRegister() {
 
 
   this.unsetOpened = function (dropdown) {
-    if (dropdown === openedDropdown) {
-      openedDropdown = null;
-      dropdown.setState(_objectSpread({}, dropdown.state, {
-        opened: false
-      }));
+    var dropdownPos = openedDropdowns.indexOf(dropdown);
+
+    if (dropdownPos > -1) {
+      for (var i = openedDropdowns.length - 1; i >= dropdownPos; i--) {
+        openedDropdowns[i].close(true);
+        openedDropdowns.splice(i, 1);
+      }
     }
 
     return _this;
