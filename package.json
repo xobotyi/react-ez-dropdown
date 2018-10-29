@@ -27,6 +27,12 @@
     "react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0",
     "prop-types": "^15.0.0"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && git add .",
+      "post-commit": "git update-index -g"
+    }
+  },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
@@ -78,7 +84,6 @@
     "test:coverage": "cross-env NODE_ENV=test COVERAGE=true karma start --single-run",
     "format": "prettier --write src/**/*.js tests/**/*.js examples/**/*.js",
     "format:list": "prettier -l src/**/*.js tests/**/*.js examples/**/*.js",
-    "precommit": "npm run format && git add",
     "prepublishOnly": "npm test && npm run build"
   }
 }
