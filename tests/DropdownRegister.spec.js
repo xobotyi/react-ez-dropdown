@@ -1,4 +1,4 @@
-import expect from "expect";
+import expect           from "expect";
 import DropdownRegister from "../src/util/DropdownRegister";
 
 describe("DropdownRegister", () => {
