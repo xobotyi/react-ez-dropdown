@@ -1,6 +1,6 @@
 {
   "name": "react-ez-dropdown",
-  "description": "The best React custom scrollbars component",
+  "description": "",
   "version": "0.1.7",
   "main": "dist/index.js",
   "types": "index.d.ts",
