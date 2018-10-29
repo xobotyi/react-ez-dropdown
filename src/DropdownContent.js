@@ -1,8 +1,8 @@
-import PropTypes        from "prop-types";
-import React            from "react";
+import PropTypes from "prop-types";
+import React from "react";
 import DropdownRegister from "./util/DropdownRegister";
 
-const onWindowClick = (event) => {
+const onWindowClick = event => {
     const openedDropdowns = DropdownRegister.getOpened();
 
     if (openedDropdowns.length) {
@@ -15,7 +15,12 @@ const onWindowClick = (event) => {
             }
 
             // check if dropdown's trigger has been clicked
-            if (dropdown.triggers.length && dropdown.triggers.some(trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target))) {
+            if (
+                dropdown.triggers.length &&
+                dropdown.triggers.some(
+                    trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target)
+                )
+            ) {
                 continue;
             }
 
@@ -26,25 +31,24 @@ const onWindowClick = (event) => {
     return true;
 };
 
-export default class DropdownContent extends React.Component
-{
+export default class DropdownContent extends React.Component {
     static displayName = "DropdownContent";
 
     static propTypes = {
         className: PropTypes.string,
-        tagName:   PropTypes.string,
+        tagName: PropTypes.string,
 
         onShow: PropTypes.func,
         onHide: PropTypes.func,
 
-        opened:       PropTypes.bool,
+        opened: PropTypes.bool,
         removeOnHide: PropTypes.bool,
-        triggers:     PropTypes.arrayOf(PropTypes.element),
+        triggers: PropTypes.arrayOf(PropTypes.element),
     };
 
     static defaultProps = {
-        tagName:      "div",
-        opened:       false,
+        tagName: "div",
+        opened: false,
         removeOnHide: false,
     };
 
@@ -88,18 +92,19 @@ export default class DropdownContent extends React.Component
     }
 
     markTriggers = () => {
-        this.triggers.length && this.triggers.forEach(trigger => {
-            trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened);
-        });
+        this.triggers.length &&
+            this.triggers.forEach(trigger => {
+                trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened);
+            });
 
         return this;
     };
 
     open = (noRegister = false) => {
         this.setState({
-                          ...this.state,
-                          opened: true,
-                      });
+            ...this.state,
+            opened: true,
+        });
         !noRegister && DropdownRegister.setOpened(this);
 
         return this;
@@ -107,9 +112,9 @@ export default class DropdownContent extends React.Component
 
     close = (noRegister = false) => {
         this.setState({
-                          ...this.state,
-                          opened: false,
-                      });
+            ...this.state,
+            opened: false,
+        });
         !noRegister && DropdownRegister.unsetOpened(this);
 
         return this;
@@ -118,15 +123,14 @@ export default class DropdownContent extends React.Component
     toggle = (forced = null) => {
         if (forced === null) {
             this.state.opened ? this.close() : this.open();
-        }
-        else {
+        } else {
             forced ? this.open() : this.close();
         }
 
         return this;
     };
 
-    bindTriggers = (triggers) => {
+    bindTriggers = triggers => {
         triggers.forEach(trigger => {
             trigger && this.triggers.indexOf(trigger) === -1 && this.triggers.push(trigger);
         });
@@ -134,7 +138,7 @@ export default class DropdownContent extends React.Component
         return this;
     };
 
-    unbindTriggers = (triggers) => {
+    unbindTriggers = triggers => {
         triggers.forEach(trigger => {
             let i = this.triggers.indexOf(trigger);
 
@@ -146,26 +150,31 @@ export default class DropdownContent extends React.Component
 
     render() {
         const {
-                  tagName, className,
-                  opened: openedProp, removeOnHide, triggers, disabled,
+                tagName,
+                className,
+                opened: openedProp,
+                removeOnHide,
+                triggers,
+                disabled,
 
-                  ...props
-              }        = this.props,
-              {opened} = this.state;
+                ...props
+            } = this.props,
+            {opened} = this.state;
 
-        if (!opened && removeOnHide) { return null; }
+        if (!opened && removeOnHide) {
+            return null;
+        }
 
         let contentClassNames = "EzDropdown-content" + (className ? " " + className : "");
         opened && (contentClassNames += " EzDropdown-opened");
 
-        return React.createElement(
-                tagName,
-                {
-                    ...props,
-                    className: contentClassNames,
-                    ref:       (ref) => {this.contentElement = ref;},
-                    style:     {...(!removeOnHide && {display: opened ? null : "none"})},
-                },
-        );
+        return React.createElement(tagName, {
+            ...props,
+            className: contentClassNames,
+            ref: ref => {
+                this.contentElement = ref;
+            },
+            style: {...(!removeOnHide && {display: opened ? null : "none"})},
+        });
     }
 }

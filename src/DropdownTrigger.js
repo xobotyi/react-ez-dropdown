@@ -1,13 +1,12 @@
 import PropTypes from "prop-types";
-import React     from "react";
+import React from "react";
 
-export default class DropdownTrigger extends React.Component
-{
+export default class DropdownTrigger extends React.Component {
     static displayName = "DropdownTrigger";
 
     static propTypes = {
         className: PropTypes.string,
-        tagName:   PropTypes.string,
+        tagName: PropTypes.string,
 
         disabled: PropTypes.bool,
 
@@ -36,7 +35,7 @@ export default class DropdownTrigger extends React.Component
         });
     }
 
-    bindDropdowns = (dropdowns) => {
+    bindDropdowns = dropdowns => {
         dropdowns.forEach(dropdown => {
             dropdown && this.dropdowns.indexOf(dropdown) === -1 && this.dropdowns.push(dropdown);
         });
@@ -44,7 +43,7 @@ export default class DropdownTrigger extends React.Component
         return this;
     };
 
-    unbindDropdowns = (dropdowns) => {
+    unbindDropdowns = dropdowns => {
         dropdowns.forEach(dropdown => {
             let i = this.dropdowns.indexOf(dropdown);
             i !== -1 && this.dropdowns.splice(i, 1);
@@ -60,21 +59,17 @@ export default class DropdownTrigger extends React.Component
     };
 
     render() {
-        const {
-                  tagName, className,
-                  dropdowns, disabled,
-                  ...props
-              } = this.props;
+        const {tagName, className, dropdowns, disabled, ...props} = this.props;
 
         let triggerClassNames = "EzDropdown-trigger" + (className ? " " + className : "");
 
-        return React.createElement(
-                tagName,
-                {
-                    ...props,
-                    className: triggerClassNames,
-                    ref:       (ref) => {this.triggerElement = ref;},
-                    onClick:   this.handleClick,
-                });
+        return React.createElement(tagName, {
+            ...props,
+            className: triggerClassNames,
+            ref: ref => {
+                this.triggerElement = ref;
+            },
+            onClick: this.handleClick,
+        });
     }
 }

@@ -35,14 +35,18 @@ function DropdownRegister() {
      *
      * @return {DropdownContent[]}
      */
-    this.getRegistered = () => {return [...registeredDropdowns];};
+    this.getRegistered = () => {
+        return [...registeredDropdowns];
+    };
 
     /**
      * Return opened dropdown.
      *
      * @return {DropdownContent[]}
      */
-    this.getOpened = () => {return [...openedDropdowns];};
+    this.getOpened = () => {
+        return [...openedDropdowns];
+    };
 
     /**
      * Add instance to register if it not presented there.
@@ -50,7 +54,7 @@ function DropdownRegister() {
      * @param {DropdownContent} dropdown Dropdown instance
      * @return {number} count of registered dropdowns
      */
-    this.registerDropdown = (dropdown) => {
+    this.registerDropdown = dropdown => {
         if (registeredDropdowns.indexOf(dropdown) === -1) {
             registeredDropdowns.push(dropdown);
         }
@@ -64,7 +68,7 @@ function DropdownRegister() {
      * @param {DropdownContent} dropdown Dropdown instance
      * @return {number} count of registered dropdowns left
      */
-    this.unregisterDropdown = (dropdown) => {
+    this.unregisterDropdown = dropdown => {
         const index = registeredDropdowns.indexOf(dropdown);
 
         if (index !== -1) {
@@ -81,7 +85,7 @@ function DropdownRegister() {
      * @param {DropdownContent|null} dropdown
      * @return {DropdownRegister}
      */
-    this.setOpened = (dropdown) => {
+    this.setOpened = dropdown => {
         if (openedDropdowns[openedDropdowns.length - 1] !== dropdown) {
             for (let i = openedDropdowns.length - 1; i >= 0; i--) {
                 if (openedDropdowns[i].contentElement.contains(dropdown.contentElement)) {
@@ -104,7 +108,7 @@ function DropdownRegister() {
      * @param dropdown
      * @return {DropdownRegister}
      */
-    this.unsetOpened = (dropdown) => {
+    this.unsetOpened = dropdown => {
         let dropdownPos = openedDropdowns.indexOf(dropdown);
 
         if (dropdownPos > -1) {

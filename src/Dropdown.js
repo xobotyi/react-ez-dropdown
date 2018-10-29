@@ -1,41 +1,41 @@
-import React           from "react";
+import React from "react";
 import DropdownContent from "./DropdownContent";
 import DropdownTrigger from "./DropdownTrigger";
 
-export default class Dropdown extends React.Component
-{
+export default class Dropdown extends React.Component {
     static displayName = "Dropdown";
 
     render() {
-        const boundTriggers  = [],
-              boundDropdowns = [];
+        const boundTriggers = [],
+            boundDropdowns = [];
 
-        return React.Children.map(this.props.children, (child) => {
+        return React.Children.map(this.props.children, child => {
             if (child.type === DropdownTrigger) {
-                child = React.cloneElement(child,
-                                           {
-                                               dropdowns: boundDropdowns,
-                                               ref:       (ref) => {
-                                                   if (!ref) { return; }
+                child = React.cloneElement(child, {
+                    dropdowns: boundDropdowns,
+                    ref: ref => {
+                        if (!ref) {
+                            return;
+                        }
 
-                                                   ref.bindDropdowns(boundDropdowns);
-                                                   boundDropdowns.forEach(dropdown => dropdown && dropdown.bindTriggers([ref]));
-                                                   boundTriggers.push(ref);
-                                               },
-                                           });
-            }
-            else if (child.type === DropdownContent) {
-                child = React.cloneElement(child,
-                                           {
-                                               triggers: boundTriggers,
-                                               ref:      (ref) => {
-                                                   if (!ref) { return; }
+                        ref.bindDropdowns(boundDropdowns);
+                        boundDropdowns.forEach(dropdown => dropdown && dropdown.bindTriggers([ref]));
+                        boundTriggers.push(ref);
+                    },
+                });
+            } else if (child.type === DropdownContent) {
+                child = React.cloneElement(child, {
+                    triggers: boundTriggers,
+                    ref: ref => {
+                        if (!ref) {
+                            return;
+                        }
 
-                                                   ref.bindTriggers(boundTriggers);
-                                                   boundTriggers.forEach(trigger => trigger && trigger.bindDropdowns([ref]));
-                                                   boundDropdowns.push(ref);
-                                               },
-                                           });
+                        ref.bindTriggers(boundTriggers);
+                        boundTriggers.forEach(trigger => trigger && trigger.bindDropdowns([ref]));
+                        boundDropdowns.push(ref);
+                    },
+                });
             }
 
             return child;
