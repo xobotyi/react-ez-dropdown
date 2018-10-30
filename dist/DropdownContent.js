@@ -181,6 +181,7 @@ function (_React$Component) {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
       this.markTriggers();
+      this.state.opened ? this.props.onShow && this.props.onShow.call(this) : this.props.onHide && this.props.onHide.call(this);
     }
   }, {
     key: "render",
@@ -196,7 +197,9 @@ function (_React$Component) {
           closeOnEsc = _this$props.closeOnEsc,
           closeOnOutsideClick = _this$props.closeOnOutsideClick,
           triggers = _this$props.triggers,
-          props = _objectWithoutProperties(_this$props, ["tagName", "className", "style", "opened", "removeOnHide", "closeOnEsc", "closeOnOutsideClick", "triggers"]),
+          onShow = _this$props.onShow,
+          onHide = _this$props.onHide,
+          props = _objectWithoutProperties(_this$props, ["tagName", "className", "style", "opened", "removeOnHide", "closeOnEsc", "closeOnOutsideClick", "triggers", "onShow", "onHide"]),
           opened = this.state.opened;
 
       if (!opened && removeOnHide) {
@@ -205,8 +208,8 @@ function (_React$Component) {
 
       return _react.default.createElement(tagName, _objectSpread({}, props, {
         className: "EzDropdown-content" + (className ? " " + className : "") + (opened ? " EzDropdown-opened" : ""),
-        style: _objectSpread({}, style, !removeOnHide && {
-          display: opened ? null : "none"
+        style: _objectSpread({}, style, !removeOnHide && !opened && {
+          display: "none"
         }),
         ref: function ref(_ref) {
           _this3.contentElement = _ref;

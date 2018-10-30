@@ -57,6 +57,10 @@ export default class DropdownContent extends React.Component {
 
     componentDidUpdate() {
         this.markTriggers();
+
+        this.state.opened
+            ? this.props.onShow && this.props.onShow.call(this)
+            : this.props.onHide && this.props.onHide.call(this);
     }
 
     markTriggers = () => {
@@ -162,6 +166,9 @@ export default class DropdownContent extends React.Component {
 
                 triggers,
 
+                onShow,
+                onHide,
+
                 ...props
             } = this.props,
             {opened} = this.state;
@@ -173,7 +180,7 @@ export default class DropdownContent extends React.Component {
         return React.createElement(tagName, {
             ...props,
             className: "EzDropdown-content" + (className ? " " + className : "") + (opened ? " EzDropdown-opened" : ""),
-            style: {...style, ...(!removeOnHide && {display: opened ? null : "none"})},
+            style: {...style, ...(!removeOnHide && !opened && {display: "none"})},
             ref: ref => {
                 this.contentElement = ref;
             },
