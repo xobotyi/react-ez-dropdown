@@ -1,7 +1,7 @@
 {
   "name": "react-ez-dropdown",
   "description": "",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index.js",
   "types": "index.d.ts",
   "repository": {
