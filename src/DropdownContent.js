@@ -69,6 +69,7 @@ export default class DropdownContent extends React.Component {
 
         document.body.addEventListener("click", this.handleBodyClick, {passive: true});
         document.body.addEventListener("touch", this.handleBodyClick, {passive: true});
+        document.body.addEventListener("keydown", this.handleBodyKeypress, {passive: true});
 
         return this;
     };
@@ -81,6 +82,7 @@ export default class DropdownContent extends React.Component {
 
         document.body.removeEventListener("click", this.handleBodyClick, {passive: true});
         document.body.removeEventListener("touch", this.handleBodyClick, {passive: true});
+        document.body.removeEventListener("keydown", this.handleBodyKeypress, {passive: true});
 
         return this;
     };
@@ -112,6 +114,12 @@ export default class DropdownContent extends React.Component {
         }
 
         this.close();
+    };
+
+    handleBodyKeypress = event => {
+        event.which && event.which === 27 && this.close();
+
+        return true;
     };
 
     bindTriggers = triggers => {
