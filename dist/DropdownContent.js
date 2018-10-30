@@ -67,6 +67,9 @@ function (_React$Component) {
       document.body.addEventListener("touch", _this.handleBodyClick, {
         passive: true
       });
+      document.body.addEventListener("keydown", _this.handleBodyKeypress, {
+        passive: true
+      });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
@@ -79,6 +82,9 @@ function (_React$Component) {
         passive: true
       });
       document.body.removeEventListener("touch", _this.handleBodyClick, {
+        passive: true
+      });
+      document.body.removeEventListener("keydown", _this.handleBodyKeypress, {
         passive: true
       });
       return _assertThisInitialized(_assertThisInitialized(_this));
@@ -110,6 +116,11 @@ function (_React$Component) {
       }
 
       _this.close();
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleBodyKeypress", function (event) {
+      event.which && event.which === 27 && _this.close();
+      return true;
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "bindTriggers", function (triggers) {
