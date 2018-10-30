@@ -9,8 +9,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _react = _interopRequireDefault(require("react"));
 
-var _DropdownRegister = _interopRequireDefault(require("./util/DropdownRegister"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -39,31 +37,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var onWindowClick = function onWindowClick(event) {
-  var openedDropdowns = _DropdownRegister.default.getOpened();
-
-  if (openedDropdowns.length) {
-    for (var i = openedDropdowns.length - 1; i >= 0; i--) {
-      var dropdown = openedDropdowns[i]; // check if dropdown itself or its content has been clicked
-
-      if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
-        continue;
-      } // check if dropdown's trigger has been clicked
-
-
-      if (dropdown.triggers.length && dropdown.triggers.some(function (trigger) {
-        return event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target);
-      })) {
-        continue;
-      }
-
-      dropdown.close();
-    }
-  }
-
-  return true;
-};
-
 var DropdownContent =
 /*#__PURE__*/
 function (_React$Component) {
@@ -78,30 +51,36 @@ function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "markTriggers", function () {
       _this.triggers.length && _this.triggers.forEach(function (trigger) {
-        trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", _this.state.opened);
+        return trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", _this.state.opened);
       });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "open", function () {
-      var noRegister = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
       _this.setState(_objectSpread({}, _this.state, {
         opened: true
       }));
 
-      !noRegister && _DropdownRegister.default.setOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+      document.body.addEventListener("click", _this.handleBodyClick, {
+        passive: true
+      });
+      document.body.addEventListener("touch", _this.handleBodyClick, {
+        passive: true
+      });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "close", function () {
-      var noRegister = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
       _this.setState(_objectSpread({}, _this.state, {
         opened: false
       }));
 
-      !noRegister && _DropdownRegister.default.unsetOpened(_assertThisInitialized(_assertThisInitialized(_this)));
+      document.body.removeEventListener("click", _this.handleBodyClick, {
+        passive: true
+      });
+      document.body.removeEventListener("touch", _this.handleBodyClick, {
+        passive: true
+      });
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
@@ -115,6 +94,22 @@ function (_React$Component) {
       }
 
       return _assertThisInitialized(_assertThisInitialized(_this));
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleBodyClick", function (event) {
+      // check if dropdown itself or its content has been clicked
+      if (event.target === _this.contentElement || _this.contentElement.contains(event.target)) {
+        return true;
+      } // check if dropdown's trigger has been clicked
+
+
+      if (_this.triggers.length && _this.triggers.some(function (trigger) {
+        return event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target);
+      })) {
+        return true;
+      }
+
+      _this.close();
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "bindTriggers", function (triggers) {
@@ -146,15 +141,6 @@ function (_React$Component) {
       this.props.triggers && this.bindTriggers(this.props.triggers);
       this.markTriggers();
 
-      if (_DropdownRegister.default.registerDropdown(this) === 1) {
-        document.body.addEventListener("click", onWindowClick, {
-          passive: true
-        });
-        document.body.addEventListener("touch", onWindowClick, {
-          passive: true
-        });
-      }
-
       if (this.state.opened) {
         this.open();
       }
@@ -165,17 +151,14 @@ function (_React$Component) {
       var _this2 = this;
 
       this.triggers.concat([]).forEach(function (trigger) {
-        trigger.unbindDropdowns([_this2]);
+        return trigger.unbindDropdowns([_this2]);
       });
-
-      if (_DropdownRegister.default.unregisterDropdown(this) === 0) {
-        document.body.removeEventListener("click", onWindowClick, {
-          passive: true
-        });
-        document.body.removeEventListener("touch", onWindowClick, {
-          passive: true
-        });
-      }
+      document.body.removeEventListener("click", this.handleBodyClick, {
+        passive: true
+      });
+      document.body.removeEventListener("touch", this.handleBodyClick, {
+        passive: true
+      });
     }
   }, {
     key: "componentDidUpdate",

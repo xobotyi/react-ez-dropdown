@@ -54,6 +54,7 @@ module.exports = function karmaConfig(config) {
                                                    },
                                                ],
                                                "@babel/plugin-proposal-class-properties",
+                                               "@babel/plugin-proposal-export-default-from",
                                            ],
                                        },
                                    },
