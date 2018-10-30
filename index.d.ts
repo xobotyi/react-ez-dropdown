@@ -19,11 +19,11 @@ export interface DropdownContentProps {
 }
 
 export class DropdownTrigger extends Component<DropdownTriggerProps> {
-    bindDropdowns(): DropdownTrigger;
+    bindDropdowns(dropdowns?: Array<DropdownContent>): DropdownTrigger;
 
-    unbindDropdowns(): DropdownTrigger;
+    unbindDropdowns(dropdowns?: Array<DropdownContent>): DropdownTrigger;
 
-    handleClick(): boolean;
+    handleClick(event?: Event): boolean;
 }
 
 export class DropdownContent extends Component<DropdownContentProps> {
@@ -35,9 +35,9 @@ export class DropdownContent extends Component<DropdownContentProps> {
 
     public toggle(): DropdownContent;
 
-    public bindTriggers(): DropdownContent;
+    public bindTriggers(triggers?: Array<DropdownTrigger>): DropdownContent;
 
-    public unbindTriggers(): DropdownContent;
+    public unbindTriggers(triggers?: Array<DropdownTrigger>): DropdownContent;
 }
 
 
