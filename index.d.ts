@@ -8,15 +8,6 @@ export interface DropdownTriggerProps {
     dropdowns?: Array<DropdownContent>;
 }
 
-export class DropdownTrigger extends Component<DropdownTriggerProps> {
-    bindDropdowns(): DropdownTrigger;
-
-    unbindDropdowns(): DropdownTrigger;
-
-    handleClick(): boolean;
-}
-
-
 export interface DropdownContentProps {
     className?: string;
     tagName?: string;
@@ -25,6 +16,14 @@ export interface DropdownContentProps {
     opened?: boolean;
     removeOnHide?: boolean;
     triggers?: Array<DropdownTrigger>;
+}
+
+export class DropdownTrigger extends Component<DropdownTriggerProps> {
+    bindDropdowns(): DropdownTrigger;
+
+    unbindDropdowns(): DropdownTrigger;
+
+    handleClick(): boolean;
 }
 
 export class DropdownContent extends Component<DropdownContentProps> {

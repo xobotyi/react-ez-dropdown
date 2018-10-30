@@ -1,35 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import DropdownRegister from "./util/DropdownRegister";
-
-const onWindowClick = event => {
-    const openedDropdowns = DropdownRegister.getOpened();
-
-    if (openedDropdowns.length) {
-        for (let i = openedDropdowns.length - 1; i >= 0; i--) {
-            const dropdown = openedDropdowns[i];
-
-            // check if dropdown itself or its content has been clicked
-            if (event.target === dropdown.contentElement || dropdown.contentElement.contains(event.target)) {
-                continue;
-            }
-
-            // check if dropdown's trigger has been clicked
-            if (
-                dropdown.triggers.length &&
-                dropdown.triggers.some(
-                    trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target)
-                )
-            ) {
-                continue;
-            }
-
-            dropdown.close();
-        }
-    }
-
-    return true;
-};
 
 export default class DropdownContent extends React.Component {
     static displayName = "DropdownContent";
@@ -66,25 +36,16 @@ export default class DropdownContent extends React.Component {
         this.props.triggers && this.bindTriggers(this.props.triggers);
         this.markTriggers();
 
-        if (DropdownRegister.registerDropdown(this) === 1) {
-            document.body.addEventListener("click", onWindowClick, {passive: true});
-            document.body.addEventListener("touch", onWindowClick, {passive: true});
-        }
-
         if (this.state.opened) {
             this.open();
         }
     }
 
     componentWillUnmount() {
-        this.triggers.concat([]).forEach(trigger => {
-            trigger.unbindDropdowns([this]);
-        });
+        this.triggers.concat([]).forEach(trigger => trigger.unbindDropdowns([this]));
 
-        if (DropdownRegister.unregisterDropdown(this) === 0) {
-            document.body.removeEventListener("click", onWindowClick, {passive: true});
-            document.body.removeEventListener("touch", onWindowClick, {passive: true});
-        }
+        document.body.removeEventListener("click", this.handleBodyClick, {passive: true});
+        document.body.removeEventListener("touch", this.handleBodyClick, {passive: true});
     }
 
     componentDidUpdate() {
@@ -93,29 +54,33 @@ export default class DropdownContent extends React.Component {
 
     markTriggers = () => {
         this.triggers.length &&
-            this.triggers.forEach(trigger => {
-                trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened);
-            });
+            this.triggers.forEach(
+                trigger => trigger && trigger.triggerElement.classList.toggle("EzDropdown-opened", this.state.opened)
+            );
 
         return this;
     };
 
-    open = (noRegister = false) => {
+    open = () => {
         this.setState({
             ...this.state,
             opened: true,
         });
-        !noRegister && DropdownRegister.setOpened(this);
+
+        document.body.addEventListener("click", this.handleBodyClick, {passive: true});
+        document.body.addEventListener("touch", this.handleBodyClick, {passive: true});
 
         return this;
     };
 
-    close = (noRegister = false) => {
+    close = () => {
         this.setState({
             ...this.state,
             opened: false,
         });
-        !noRegister && DropdownRegister.unsetOpened(this);
+
+        document.body.removeEventListener("click", this.handleBodyClick, {passive: true});
+        document.body.removeEventListener("touch", this.handleBodyClick, {passive: true});
 
         return this;
     };
@@ -128,6 +93,25 @@ export default class DropdownContent extends React.Component {
         }
 
         return this;
+    };
+
+    handleBodyClick = event => {
+        // check if dropdown itself or its content has been clicked
+        if (event.target === this.contentElement || this.contentElement.contains(event.target)) {
+            return true;
+        }
+
+        // check if dropdown's trigger has been clicked
+        if (
+            this.triggers.length &&
+            this.triggers.some(
+                trigger => event.target === trigger.triggerElement || trigger.triggerElement.contains(event.target)
+            )
+        ) {
+            return true;
+        }
+
+        this.close();
     };
 
     bindTriggers = triggers => {
