@@ -5,10 +5,12 @@ export default class DropdownTrigger extends React.Component {
     static displayName = "DropdownTrigger";
 
     static propTypes = {
-        className: PropTypes.string,
         tagName: PropTypes.string,
+        className: PropTypes.string,
+        style: PropTypes.object,
 
         disabled: PropTypes.bool,
+        onClick: PropTypes.func,
 
         dropdowns: PropTypes.arrayOf(PropTypes.element),
     };
@@ -52,8 +54,10 @@ export default class DropdownTrigger extends React.Component {
         return this;
     };
 
-    handleClick = () => {
+    handleClick = e => {
         this.dropdowns.forEach(dropdown => dropdown.toggle());
+
+        this.props.onClick && this.props.onClick.call(this.triggerElement, e);
 
         return true;
     };

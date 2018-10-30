@@ -5,21 +5,27 @@ export default class DropdownContent extends React.Component {
     static displayName = "DropdownContent";
 
     static propTypes = {
-        className: PropTypes.string,
         tagName: PropTypes.string,
+        className: PropTypes.string,
+        style: PropTypes.object,
 
         onShow: PropTypes.func,
         onHide: PropTypes.func,
 
         opened: PropTypes.bool,
         removeOnHide: PropTypes.bool,
+        closeOnOutsideClick: PropTypes.bool,
+        closeOnEsc: PropTypes.bool,
         triggers: PropTypes.arrayOf(PropTypes.element),
     };
 
     static defaultProps = {
         tagName: "div",
+
         opened: false,
         removeOnHide: false,
+        closeOnOutsideClick: true,
+        closeOnEsc: true,
     };
 
     constructor(props) {
@@ -46,6 +52,7 @@ export default class DropdownContent extends React.Component {
 
         document.body.removeEventListener("click", this.handleBodyClick, {passive: true});
         document.body.removeEventListener("touch", this.handleBodyClick, {passive: true});
+        document.body.removeEventListener("keydown", this.handleBodyKeypress, {passive: true});
     }
 
     componentDidUpdate() {
@@ -67,9 +74,11 @@ export default class DropdownContent extends React.Component {
             opened: true,
         });
 
-        document.body.addEventListener("click", this.handleBodyClick, {passive: true});
-        document.body.addEventListener("touch", this.handleBodyClick, {passive: true});
-        document.body.addEventListener("keydown", this.handleBodyKeypress, {passive: true});
+        if (this.props.closeOnOutsideClick) {
+            document.body.addEventListener("click", this.handleBodyClick, {passive: true});
+            document.body.addEventListener("touch", this.handleBodyClick, {passive: true});
+        }
+        this.props.closeOnEsc && document.body.addEventListener("keydown", this.handleBodyKeypress, {passive: true});
 
         return this;
     };
@@ -144,10 +153,14 @@ export default class DropdownContent extends React.Component {
         const {
                 tagName,
                 className,
+                style,
+
                 opened: openedProp,
                 removeOnHide,
+                closeOnEsc,
+                closeOnOutsideClick,
+
                 triggers,
-                disabled,
 
                 ...props
             } = this.props,
@@ -157,16 +170,13 @@ export default class DropdownContent extends React.Component {
             return null;
         }
 
-        let contentClassNames = "EzDropdown-content" + (className ? " " + className : "");
-        opened && (contentClassNames += " EzDropdown-opened");
-
         return React.createElement(tagName, {
             ...props,
-            className: contentClassNames,
+            className: "EzDropdown-content" + (className ? " " + className : "") + (opened ? " EzDropdown-opened" : ""),
+            style: {...style, ...(!removeOnHide && {display: opened ? null : "none"})},
             ref: ref => {
                 this.contentElement = ref;
             },
-            style: {...(!removeOnHide && {display: opened ? null : "none"})},
         });
     }
 }

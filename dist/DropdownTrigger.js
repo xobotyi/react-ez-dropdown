@@ -65,11 +65,12 @@ function (_React$Component) {
       return _assertThisInitialized(_assertThisInitialized(_this));
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleClick", function () {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleClick", function (e) {
       _this.dropdowns.forEach(function (dropdown) {
         return dropdown.toggle();
       });
 
+      _this.props.onClick && _this.props.onClick.call(_this.triggerElement, e);
       return true;
     });
 
@@ -122,9 +123,11 @@ exports.default = DropdownTrigger;
 _defineProperty(DropdownTrigger, "displayName", "DropdownTrigger");
 
 _defineProperty(DropdownTrigger, "propTypes", {
-  className: _propTypes.default.string,
   tagName: _propTypes.default.string,
+  className: _propTypes.default.string,
+  style: _propTypes.default.object,
   disabled: _propTypes.default.bool,
+  onClick: _propTypes.default.func,
   dropdowns: _propTypes.default.arrayOf(_propTypes.default.element)
 });
 

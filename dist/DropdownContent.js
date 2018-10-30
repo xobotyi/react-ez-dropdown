@@ -61,13 +61,16 @@ function (_React$Component) {
         opened: true
       }));
 
-      document.body.addEventListener("click", _this.handleBodyClick, {
-        passive: true
-      });
-      document.body.addEventListener("touch", _this.handleBodyClick, {
-        passive: true
-      });
-      document.body.addEventListener("keydown", _this.handleBodyKeypress, {
+      if (_this.props.closeOnOutsideClick) {
+        document.body.addEventListener("click", _this.handleBodyClick, {
+          passive: true
+        });
+        document.body.addEventListener("touch", _this.handleBodyClick, {
+          passive: true
+        });
+      }
+
+      _this.props.closeOnEsc && document.body.addEventListener("keydown", _this.handleBodyKeypress, {
         passive: true
       });
       return _assertThisInitialized(_assertThisInitialized(_this));
@@ -170,6 +173,9 @@ function (_React$Component) {
       document.body.removeEventListener("touch", this.handleBodyClick, {
         passive: true
       });
+      document.body.removeEventListener("keydown", this.handleBodyKeypress, {
+        passive: true
+      });
     }
   }, {
     key: "componentDidUpdate",
@@ -184,27 +190,27 @@ function (_React$Component) {
       var _this$props = this.props,
           tagName = _this$props.tagName,
           className = _this$props.className,
+          style = _this$props.style,
           openedProp = _this$props.opened,
           removeOnHide = _this$props.removeOnHide,
+          closeOnEsc = _this$props.closeOnEsc,
+          closeOnOutsideClick = _this$props.closeOnOutsideClick,
           triggers = _this$props.triggers,
-          disabled = _this$props.disabled,
-          props = _objectWithoutProperties(_this$props, ["tagName", "className", "opened", "removeOnHide", "triggers", "disabled"]),
+          props = _objectWithoutProperties(_this$props, ["tagName", "className", "style", "opened", "removeOnHide", "closeOnEsc", "closeOnOutsideClick", "triggers"]),
           opened = this.state.opened;
 
       if (!opened && removeOnHide) {
         return null;
       }
 
-      var contentClassNames = "EzDropdown-content" + (className ? " " + className : "");
-      opened && (contentClassNames += " EzDropdown-opened");
       return _react.default.createElement(tagName, _objectSpread({}, props, {
-        className: contentClassNames,
+        className: "EzDropdown-content" + (className ? " " + className : "") + (opened ? " EzDropdown-opened" : ""),
+        style: _objectSpread({}, style, !removeOnHide && {
+          display: opened ? null : "none"
+        }),
         ref: function ref(_ref) {
           _this3.contentElement = _ref;
-        },
-        style: _objectSpread({}, !removeOnHide && {
-          display: opened ? null : "none"
-        })
+        }
       }));
     }
   }]);
@@ -217,17 +223,22 @@ exports.default = DropdownContent;
 _defineProperty(DropdownContent, "displayName", "DropdownContent");
 
 _defineProperty(DropdownContent, "propTypes", {
-  className: _propTypes.default.string,
   tagName: _propTypes.default.string,
+  className: _propTypes.default.string,
+  style: _propTypes.default.object,
   onShow: _propTypes.default.func,
   onHide: _propTypes.default.func,
   opened: _propTypes.default.bool,
   removeOnHide: _propTypes.default.bool,
+  closeOnOutsideClick: _propTypes.default.bool,
+  closeOnEsc: _propTypes.default.bool,
   triggers: _propTypes.default.arrayOf(_propTypes.default.element)
 });
 
 _defineProperty(DropdownContent, "defaultProps", {
   tagName: "div",
   opened: false,
-  removeOnHide: false
+  removeOnHide: false,
+  closeOnOutsideClick: true,
+  closeOnEsc: true
 });
