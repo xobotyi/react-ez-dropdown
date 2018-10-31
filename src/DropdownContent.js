@@ -55,12 +55,19 @@ export default class DropdownContent extends React.Component {
         document.body.removeEventListener("keydown", this.handleBodyKeypress, {passive: true});
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         this.markTriggers();
 
-        this.state.opened
-            ? this.props.onShow && this.props.onShow.call(this)
-            : this.props.onHide && this.props.onHide.call(this);
+        if (this.props.opened !== prevProps.opened && this.props.opened !== this.state.opened) {
+            this.setState({opened: this.props.opened});
+            return false;
+        }
+
+        if (prevState.opened !== this.state.opened) {
+            this.state.opened
+                ? this.props.onShow && this.props.onShow.call(this)
+                : this.props.onHide && this.props.onHide.call(this);
+        }
     }
 
     markTriggers = () => {
@@ -74,7 +81,6 @@ export default class DropdownContent extends React.Component {
 
     open = () => {
         this.setState({
-            ...this.state,
             opened: true,
         });
 
@@ -89,7 +95,6 @@ export default class DropdownContent extends React.Component {
 
     close = () => {
         this.setState({
-            ...this.state,
             opened: false,
         });
 
