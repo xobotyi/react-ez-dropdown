@@ -36,6 +36,10 @@ export default class DropdownContent extends React.Component {
         this.state = {
             opened: props.opened || false,
         };
+
+        if (typeof props.ref === "function") {
+            props.ref(this);
+        }
     }
 
     componentDidMount() {
@@ -173,6 +177,8 @@ export default class DropdownContent extends React.Component {
 
                 onShow,
                 onHide,
+
+                ref,
 
                 ...props
             } = this.props,
