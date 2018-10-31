@@ -10,7 +10,7 @@ export default class Head extends React.Component {
                 <h2>Examples</h2>
 
                 <Dropdown>
-                    <DropdownTrigger>Open dropdown</DropdownTrigger>
+                    <DropdownTrigger ref={ref => console.log(ref)}>Open dropdown</DropdownTrigger>
                     <DropdownContent>
                         <Dropdown>
                             <DropdownTrigger>Open dropdown</DropdownTrigger>

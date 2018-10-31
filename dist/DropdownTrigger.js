@@ -75,11 +75,6 @@ function (_React$Component) {
     });
 
     _this.dropdowns = [];
-
-    if (typeof props.ref === "function") {
-      props.ref(_assertThisInitialized(_assertThisInitialized(_this)));
-    }
-
     return _this;
   }
 
@@ -107,8 +102,7 @@ function (_React$Component) {
           className = _this$props.className,
           dropdowns = _this$props.dropdowns,
           disabled = _this$props.disabled,
-          ref = _this$props.ref,
-          props = _objectWithoutProperties(_this$props, ["tagName", "className", "dropdowns", "disabled", "ref"]);
+          props = _objectWithoutProperties(_this$props, ["tagName", "className", "dropdowns", "disabled"]);
 
       var triggerClassNames = "EzDropdown-trigger" + (className ? " " + className : "");
       return _react.default.createElement(tagName, _objectSpread({}, props, {

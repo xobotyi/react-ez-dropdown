@@ -25,10 +25,6 @@ export default class DropdownTrigger extends React.Component {
         super(props);
 
         this.dropdowns = [];
-
-        if (typeof props.ref === "function") {
-            props.ref(this);
-        }
     }
 
     componentDidMount() {
@@ -67,7 +63,7 @@ export default class DropdownTrigger extends React.Component {
     };
 
     render() {
-        const {tagName, className, dropdowns, disabled, ref, ...props} = this.props;
+        const {tagName, className, dropdowns, disabled, ...props} = this.props;
 
         let triggerClassNames = "EzDropdown-trigger" + (className ? " " + className : "");
 

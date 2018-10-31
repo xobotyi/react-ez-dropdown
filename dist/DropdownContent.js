@@ -146,11 +146,6 @@ function (_React$Component) {
     _this.state = {
       opened: props.opened || false
     };
-
-    if (typeof props.ref === "function") {
-      props.ref(_assertThisInitialized(_assertThisInitialized(_this)));
-    }
-
     return _this;
   }
 
@@ -214,8 +209,7 @@ function (_React$Component) {
           triggers = _this$props.triggers,
           onShow = _this$props.onShow,
           onHide = _this$props.onHide,
-          ref = _this$props.ref,
-          props = _objectWithoutProperties(_this$props, ["tagName", "className", "style", "opened", "removeOnHide", "closeOnEsc", "closeOnOutsideClick", "triggers", "onShow", "onHide", "ref"]),
+          props = _objectWithoutProperties(_this$props, ["tagName", "className", "style", "opened", "removeOnHide", "closeOnEsc", "closeOnOutsideClick", "triggers", "onShow", "onHide"]),
           opened = this.state.opened;
 
       if (!opened && removeOnHide) {

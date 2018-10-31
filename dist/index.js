@@ -62,8 +62,10 @@ function (_React$Component) {
       var boundTriggers = [],
           boundDropdowns = [];
       return _react.default.Children.map(this.props.children, function (child) {
+        var clonedChild;
+
         if (child.type === _DropdownTrigger2.default) {
-          child = _react.default.cloneElement(child, {
+          clonedChild = _react.default.cloneElement(child, {
             dropdowns: boundDropdowns,
             ref: function ref(_ref) {
               if (!_ref) {
@@ -76,10 +78,11 @@ function (_React$Component) {
                 return dropdown && dropdown.bindTriggers([_ref]);
               });
               boundTriggers.push(_ref);
+              typeof child.ref === "function" && child.ref(_ref);
             }
           });
         } else if (child.type === _DropdownContent2.default) {
-          child = _react.default.cloneElement(child, {
+          clonedChild = _react.default.cloneElement(child, {
             triggers: boundTriggers,
             ref: function ref(_ref2) {
               if (!_ref2) {
@@ -92,11 +95,12 @@ function (_React$Component) {
                 return trigger && trigger.bindDropdowns([_ref2]);
               });
               boundDropdowns.push(_ref2);
+              typeof child.ref === "function" && child.ref(_ref2);
             }
           });
         }
 
-        return child;
+        return clonedChild || child;
       });
     }
   }]);
