@@ -5,7 +5,7 @@ import DropdownContent from "./DropdownContent";
 export default class Dropdown extends React.Component {
   render(): React.ReactNode {
     const triggers: any[] = [];
-    const dropdown: any[] = [];
+    const dropdowns: any[] = [];
 
     const childrenArray: React.ReactNode[] = React.Children.toArray(
       this.props.children
@@ -21,15 +21,16 @@ export default class Dropdown extends React.Component {
       if (child.type === DropdownTrigger) {
         triggers.push(child);
       } else if (child.type === DropdownContent) {
-        dropdown.push(child);
+        dropdowns.push(child);
       }
     }
 
-    triggers.forEach((trigger: DropdownTrigger) => {
-      dropdown.forEach((dropdown: DropdownContent) => {
-        trigger.bindDropdown(dropdown);
-        dropdown.bindTrigger(trigger);
-      });
+    triggers.forEach(trigger => {
+      trigger.props.dropdowns = dropdowns;
+    });
+
+    dropdowns.forEach(dropdown => {
+      dropdown.props.triggers = triggers;
     });
 
     return this.props.children;

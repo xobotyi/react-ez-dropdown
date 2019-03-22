@@ -5,6 +5,8 @@ import DropdownContent, { isModifiedEvent } from "./DropdownContent";
 type DropdownTriggerProps = React.HTMLProps<HTMLDivElement> & {
   onClick?: (evt: React.MouseEvent) => void;
 
+  dropdowns?: DropdownContent[];
+
   triggerOnModifiedClick?: boolean;
   disabled?: boolean;
 };
@@ -20,8 +22,18 @@ export default class DropdownTrigger extends React.Component<
 
     disabled: PropTypes.bool,
 
+    dropdowns: PropTypes.array,
+
     onClick: PropTypes.func
   };
+
+  constructor(props) {
+    super(props);
+
+    if (this.props.dropdowns) {
+      this.dropdowns = this.props.dropdowns.slice();
+    }
+  }
 
   public componentWillUnmount(): void {
     this.dropdowns.forEach((dropdown: DropdownContent) => {
@@ -59,6 +71,8 @@ export default class DropdownTrigger extends React.Component<
 
   public render(): React.ReactElement<any> {
     const {
+      dropdowns,
+
       triggerOnModifiedClick,
 
       onClick,

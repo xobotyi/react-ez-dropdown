@@ -5,6 +5,8 @@ import DropdownTrigger from "./DropdownTrigger";
 type DropdownContentProps = React.HTMLProps<HTMLDivElement> & {
   elementRef?: (element: HTMLDivElement | null) => void;
 
+  triggers?: DropdownTrigger[];
+
   onShow?: () => void;
   onHide?: () => void;
 
@@ -42,6 +44,8 @@ export default class DropdownContent extends React.Component<
   static propTypes = {
     elementRef: PropTypes.func,
 
+    triggers: PropTypes.array,
+
     onShow: PropTypes.func,
     onHide: PropTypes.func,
 
@@ -60,6 +64,10 @@ export default class DropdownContent extends React.Component<
 
     if (this.props.opened) {
       this.bindBodyEvents();
+    }
+
+    if (this.props.triggers) {
+      this.triggers = this.props.triggers.slice();
     }
   }
 
@@ -197,6 +205,8 @@ export default class DropdownContent extends React.Component<
 
   public render(): React.ReactElement<any> | false {
     const {
+      triggers,
+
       onShow,
       onHide,
 
