@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
+import DropdownTrigger from "./DropdownTrigger";
 
-type DropdownContentProps = React.HTMLProps<HTMLElement> & {
-  elementRef?: (element: HTMLElement | null) => void;
+type DropdownContentProps = React.HTMLProps<HTMLDivElement> & {
+  elementRef?: (element: HTMLDivElement | null) => void;
 
   onShow?: () => void;
   onHide?: () => void;
@@ -18,15 +19,25 @@ type DropdownContentState = {
 };
 
 export const isModifiedEvent = (
-  event: KeyboardEvent | MouseEvent | TouchEvent
-): boolean =>
-  !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+  event:
+    | KeyboardEvent
+    | MouseEvent
+    | TouchEvent
+    | React.MouseEvent
+    | React.TouchEvent
+): boolean => {
+  return Boolean(
+    event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
+  );
+};
 
 export default class DropdownContent extends React.Component<
   DropdownContentProps,
   DropdownContentState
 > {
-  public element: HTMLElement | null;
+  public element: HTMLDivElement | null;
+
+  private triggers: DropdownTrigger[] = [];
 
   static propTypes = {
     elementRef: PropTypes.func,
@@ -72,8 +83,31 @@ export default class DropdownContent extends React.Component<
     }
   }
 
+  public bindTrigger = (trigger: DropdownTrigger): this => {
+    let idx = this.triggers.indexOf(trigger);
+
+    if (idx === -1) {
+      this.triggers.push(trigger);
+    }
+
+    return this;
+  };
+
+  public unbindTrigger = (trigger: DropdownTrigger): this => {
+    let idx = this.triggers.indexOf(trigger);
+
+    if (idx >= 0) {
+      this.triggers.splice(idx, 1);
+    }
+
+    return this;
+  };
+
   public componentWillUnmount(): void {
     this.unbindBodyEvents();
+    this.triggers.forEach((trigger: DropdownTrigger) => {
+      trigger.unbindDropdown(this);
+    });
   }
 
   public open = () => {
