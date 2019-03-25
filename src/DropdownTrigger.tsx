@@ -54,6 +54,7 @@ export default class DropdownTrigger extends React.Component<
 
     if (idx === -1) {
       this.dropdowns.push(dropdown);
+      dropdown.bindTrigger(this);
     }
 
     return this;
@@ -63,6 +64,7 @@ export default class DropdownTrigger extends React.Component<
     let idx = this.dropdowns.indexOf(dropdown);
 
     if (idx >= 0) {
+      this.dropdowns[idx].unbindTrigger(this);
       this.dropdowns.splice(idx, 1);
     }
 
@@ -77,7 +79,7 @@ export default class DropdownTrigger extends React.Component<
     }
 
     this.dropdowns.forEach(dropdown => {
-      dropdown.open();
+      dropdown.toggle();
     });
   };
 

@@ -7,30 +7,26 @@ export default class Dropdown extends React.Component {
     const triggers: any[] = [];
     const dropdowns: any[] = [];
 
-    const childrenArray: React.ReactNode[] = React.Children.toArray(
-      this.props.children
-    );
-
-    for (let i = 0; i < childrenArray.length; i++) {
-      if (!childrenArray[i]) {
-        continue;
+    React.Children.forEach(this.props.children, (child: any) => {
+      if (!child) {
+        return;
       }
 
-      let child: any = childrenArray[i];
-
-      if (child.type === DropdownTrigger) {
-        triggers.push(child);
-      } else if (child.type === DropdownContent) {
-        dropdowns.push(child);
+      if (child.type === DropdownContent) {
+        const prevRef = typeof child.ref === "function" ? child.ref : null;
+        child.ref = ref => {
+          prevRef && prevRef(ref);
+          dropdowns.push(ref);
+          triggers.forEach(trigger => trigger.bindDropdown(ref));
+        };
+      } else if (child.type === DropdownTrigger) {
+        const prevRef = typeof child.ref === "function" ? child.ref : null;
+        child.ref = ref => {
+          prevRef && prevRef(ref);
+          triggers.push(ref);
+          dropdowns.forEach(dropdown => dropdown.bindTrigger(ref));
+        };
       }
-    }
-
-    triggers.forEach(trigger => {
-      trigger.props.dropdowns = dropdowns;
-    });
-
-    dropdowns.forEach(dropdown => {
-      dropdown.props.triggers = triggers;
     });
 
     return this.props.children;

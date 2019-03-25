@@ -60,6 +60,10 @@ export default class DropdownContent extends React.Component<
   constructor(props) {
     super(props);
 
+    if (this.props.triggers) {
+      this.triggers = this.props.triggers.slice();
+    }
+
     this.state = {
       opened: this.props.openOnInit || this.props.opened || false
     };
@@ -67,11 +71,10 @@ export default class DropdownContent extends React.Component<
     if (this.state.opened) {
       this.bindBodyEvents();
     }
+  }
 
-    if (this.props.triggers) {
-      this.triggers = this.props.triggers.slice();
-      this.notifyTriggersOpenesState();
-    }
+  public componentDidMount(): void {
+    this.state.opened && this.notifyTriggersOpenedState();
   }
 
   public componentDidUpdate(
@@ -94,11 +97,11 @@ export default class DropdownContent extends React.Component<
     }
 
     if (prevState.opened !== this.state.opened) {
-      this.notifyTriggersOpenesState();
+      this.notifyTriggersOpenedState();
     }
   }
 
-  private notifyTriggersOpenesState = () => {
+  private notifyTriggersOpenedState = () => {
     this.triggers.forEach(trigger =>
       trigger.setTargetOpened(this.state.opened)
     );
@@ -109,6 +112,7 @@ export default class DropdownContent extends React.Component<
 
     if (idx === -1) {
       this.triggers.push(trigger);
+      trigger.bindDropdown(this);
     }
 
     return this;
@@ -118,6 +122,7 @@ export default class DropdownContent extends React.Component<
     let idx = this.triggers.indexOf(trigger);
 
     if (idx >= 0) {
+      this.triggers[idx].unbindDropdown(this);
       this.triggers.splice(idx, 1);
     }
 
