@@ -97,6 +97,9 @@ export default class DropdownContent extends React.Component<
     }
 
     if (prevState.opened !== this.state.opened) {
+      this.state.opened
+        ? this.props.onShow && this.props.onShow()
+        : this.props.onHide && this.props.onHide();
       this.notifyTriggersOpenedState();
     }
   }
