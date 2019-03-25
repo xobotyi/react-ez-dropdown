@@ -75,6 +75,10 @@ export default class DropdownContent extends React.Component<
 
   public componentDidMount(): void {
     this.state.opened && this.notifyTriggersOpenedState();
+
+    this.state.opened
+      ? this.props.onShow && this.props.onShow()
+      : this.props.onHide && this.props.onHide();
   }
 
   public componentDidUpdate(
