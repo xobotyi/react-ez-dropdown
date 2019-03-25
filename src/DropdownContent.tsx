@@ -11,6 +11,7 @@ type DropdownContentProps = React.HTMLProps<HTMLDivElement> & {
   onHide?: () => void;
 
   opened?: boolean;
+  openOnInit?: boolean;
   removeWhenHidden?: boolean;
   closeOnOutsideClick?: boolean;
   closeOnEscKeypress?: boolean;
@@ -50,6 +51,7 @@ export default class DropdownContent extends React.Component<
     onHide: PropTypes.func,
 
     opened: PropTypes.bool,
+    openOnInit: PropTypes.bool,
     removeWhenHidden: PropTypes.bool,
     closeOnOutsideClick: PropTypes.bool,
     closeOnEscKeypress: PropTypes.bool
@@ -59,15 +61,16 @@ export default class DropdownContent extends React.Component<
     super(props);
 
     this.state = {
-      opened: this.props.opened || false
+      opened: this.props.openOnInit || this.props.opened || false
     };
 
-    if (this.props.opened) {
+    if (this.state.opened) {
       this.bindBodyEvents();
     }
 
     if (this.props.triggers) {
       this.triggers = this.props.triggers.slice();
+      this.notifyTriggersOpenesState();
     }
   }
 
@@ -89,7 +92,17 @@ export default class DropdownContent extends React.Component<
     ) {
       this.unbindBodyEvents().bindBodyEvents();
     }
+
+    if (prevState.opened !== this.state.opened) {
+      this.notifyTriggersOpenesState();
+    }
   }
+
+  private notifyTriggersOpenesState = () => {
+    this.triggers.forEach(trigger =>
+      trigger.setTargetOpened(this.state.opened)
+    );
+  };
 
   public bindTrigger = (trigger: DropdownTrigger): this => {
     let idx = this.triggers.indexOf(trigger);
@@ -113,6 +126,7 @@ export default class DropdownContent extends React.Component<
 
   public componentWillUnmount(): void {
     this.unbindBodyEvents();
+
     this.triggers.forEach((trigger: DropdownTrigger) => {
       trigger.unbindDropdown(this);
     });
@@ -228,7 +242,7 @@ export default class DropdownContent extends React.Component<
     };
     props.className =
       "EzDropdown-Content" +
-      (this.props.className && " " + this.props.className) +
+      (this.props.className ? " " + this.props.className : "") +
       (this.state.opened ? " opened" : " closed");
 
     return <div {...props} ref={this.ref} />;

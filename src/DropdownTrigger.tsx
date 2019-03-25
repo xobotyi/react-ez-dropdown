@@ -11,9 +11,13 @@ type DropdownTriggerProps = React.HTMLProps<HTMLDivElement> & {
   disabled?: boolean;
 };
 
+type DropdownTriggerState = {
+  targetOpened: boolean;
+};
+
 export default class DropdownTrigger extends React.Component<
   DropdownTriggerProps,
-  {}
+  DropdownTriggerState
 > {
   private dropdowns: DropdownContent[] = [];
 
@@ -33,6 +37,10 @@ export default class DropdownTrigger extends React.Component<
     if (this.props.dropdowns) {
       this.dropdowns = this.props.dropdowns.slice();
     }
+
+    this.state = {
+      targetOpened: false
+    };
   }
 
   public componentWillUnmount(): void {
@@ -67,6 +75,18 @@ export default class DropdownTrigger extends React.Component<
     if (!this.props.triggerOnModifiedClick && isModifiedEvent(evt)) {
       return;
     }
+
+    this.dropdowns.forEach(dropdown => {
+      dropdown.open();
+    });
+  };
+
+  public setTargetOpened = (isOpened: boolean = false): this => {
+    this.setState({
+      targetOpened: isOpened
+    });
+
+    return this;
   };
 
   public render(): React.ReactElement<any> {
@@ -84,8 +104,9 @@ export default class DropdownTrigger extends React.Component<
 
     props.className =
       "EzDropdown-Trigger" +
-      (this.props.className && " " + this.props.className) +
-      (disabled && " disabled");
+      (this.props.className ? " " + this.props.className : "") +
+      (this.state.targetOpened ? " targetOpened" : "") +
+      (disabled ? " disabled" : "");
 
     return <div {...props} onClick={this.handleClick} />;
   }
