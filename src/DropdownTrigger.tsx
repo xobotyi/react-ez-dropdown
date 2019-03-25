@@ -50,6 +50,10 @@ export default class DropdownTrigger extends React.Component<
   }
 
   public bindDropdown = (dropdown: DropdownContent): this => {
+    if (!dropdown) {
+      return this;
+    }
+
     let idx = this.dropdowns.indexOf(dropdown);
 
     if (idx === -1) {
