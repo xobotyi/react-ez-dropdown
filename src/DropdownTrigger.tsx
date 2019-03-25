@@ -7,6 +7,8 @@ type DropdownTriggerProps = React.HTMLProps<HTMLDivElement> & {
 
   dropdowns?: DropdownContent[];
 
+  elementRef?: (element: HTMLDivElement | null) => void;
+
   triggerOnModifiedClick?: boolean;
   disabled?: boolean;
 };
@@ -20,6 +22,8 @@ export default class DropdownTrigger extends React.Component<
   DropdownTriggerState
 > {
   private dropdowns: DropdownContent[] = [];
+
+  public element: HTMLDivElement | null;
 
   static propTypes = {
     triggerOnModifiedClick: PropTypes.bool,
@@ -95,6 +99,11 @@ export default class DropdownTrigger extends React.Component<
     return this;
   };
 
+  private ref = (element: HTMLDivElement | null) => {
+    this.element = element;
+    this.props.elementRef && this.props.elementRef(element);
+  };
+
   public render(): React.ReactElement<any> {
     const {
       dropdowns,
@@ -114,6 +123,6 @@ export default class DropdownTrigger extends React.Component<
       (this.state.targetOpened ? " targetOpened" : "") +
       (disabled ? " disabled" : "");
 
-    return <div {...props} onClick={this.handleClick} />;
+    return <div {...props} onClick={this.handleClick} ref={this.ref} />;
   }
 }

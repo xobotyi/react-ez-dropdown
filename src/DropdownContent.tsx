@@ -224,7 +224,7 @@ export default class DropdownContent extends React.Component<
     ev.key === "Escape" && this.close();
   };
 
-  private ref = element => {
+  private ref = (element: HTMLDivElement | null) => {
     this.element = element;
     this.props.elementRef && this.props.elementRef(element);
   };
