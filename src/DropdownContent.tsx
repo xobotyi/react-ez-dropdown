@@ -219,7 +219,12 @@ export default class DropdownContent extends React.Component<
 
     if (
       !this.props.closeOnOutsideClick ||
-      this.triggers.some(trigger => trigger.element === ev.target)
+      this.triggers.some(
+        trigger =>
+          !!trigger.element &&
+          (trigger.element === ev.target ||
+            trigger.element.contains(ev.target as Node))
+      )
     ) {
       return;
     }
