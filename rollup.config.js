@@ -8,12 +8,14 @@ export default {
     {
       dir: "dist/cjs",
       extend: true,
-      format: "cjs"
+      format: "cjs",
+      exports: "named"
     },
     {
       dir: "dist/esm",
       extend: true,
-      format: "esm"
+      format: "esm",
+      exports: "named"
     }
   ],
 
