@@ -247,13 +247,18 @@ export default class DropdownContent extends React.Component<
 
   public render(): React.ReactElement<any> | false {
     const {
+      elementRef,
+
       triggers,
 
       onShow,
       onHide,
 
       opened,
+      openOnInit,
+
       removeWhenHidden,
+
       closeOnOutsideClick,
       closeOnEscKeypress,
 

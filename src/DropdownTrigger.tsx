@@ -32,7 +32,8 @@ export default class DropdownTrigger extends React.Component<
 
     dropdowns: PropTypes.array,
 
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    elementRef: PropTypes.func
   };
 
   constructor(props) {
@@ -106,11 +107,13 @@ export default class DropdownTrigger extends React.Component<
 
   public render(): React.ReactElement<any> {
     const {
+      onClick,
+
       dropdowns,
 
-      triggerOnModifiedClick,
+      elementRef,
 
-      onClick,
+      triggerOnModifiedClick,
 
       disabled,
 
