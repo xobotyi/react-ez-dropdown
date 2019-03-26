@@ -1,3 +1,4 @@
+import babel from "rollup-plugin-babel";
 import ts from "rollup-plugin-typescript2";
 
 export default {
@@ -30,6 +31,23 @@ export default {
           declarationDir: "dist/types"
         }
       }
+    }),
+    babel({
+      babelrc: false,
+      exclude: "node_modules/**",
+      extensions: [".ts", ".tsx", ".js", ".jsx"],
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            targets: {
+              esmodules: false,
+              chrome: "58",
+              ie: "11"
+            }
+          }
+        ]
+      ]
     })
   ]
 };

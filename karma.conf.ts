@@ -34,11 +34,11 @@ module.exports = cfg => {
         }
       },
       compilerOptions: {
-        target: "es2016",
+        target: "esnext",
         module: "commonjs",
         moduleResolution: "node",
         jsx: "react",
-        lib: ["dom", "es2016"]
+        lib: ["dom", "esnext"]
       },
       coverageOptions: {
         exclude: /(node_modules|tests|spec)/i
