@@ -7,28 +7,35 @@ export default class Dropdown extends React.Component {
     const triggers: any[] = [];
     const dropdowns: any[] = [];
 
-    React.Children.forEach(this.props.children, (child: any) => {
-      if (!child) {
-        return;
+    return React.Children.map(this.props.children, (child: any) => {
+      if (child) {
+        if (child.type === DropdownContent) {
+          const clonedChild = React.cloneElement(child, {
+            ref: ref => {
+              typeof child.ref === "function" && child.ref(ref);
+
+              dropdowns.push(ref);
+              triggers.forEach(trigger => trigger && trigger.bindDropdown(ref));
+            }
+          });
+
+          return clonedChild || child;
+        } else if (child.type === DropdownTrigger) {
+          const clonedChild = React.cloneElement(child, {
+            ref: ref => {
+              typeof child.ref === "function" && child.ref(ref);
+              triggers.push(ref);
+              dropdowns.forEach(
+                dropdown => dropdown && dropdown.bindTrigger(ref)
+              );
+            }
+          });
+
+          return clonedChild || child;
+        }
       }
 
-      if (child.type === DropdownContent) {
-        const prevRef = typeof child.ref === "function" ? child.ref : null;
-        child.ref = ref => {
-          prevRef && prevRef(ref);
-          dropdowns.push(ref);
-          triggers.forEach(trigger => trigger && trigger.bindDropdown(ref));
-        };
-      } else if (child.type === DropdownTrigger) {
-        const prevRef = typeof child.ref === "function" ? child.ref : null;
-        child.ref = ref => {
-          prevRef && prevRef(ref);
-          triggers.push(ref);
-          dropdowns.forEach(dropdown => dropdown && dropdown.bindTrigger(ref));
-        };
-      }
+      return child;
     });
-
-    return this.props.children;
   }
 }
