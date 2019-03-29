@@ -129,12 +129,16 @@ export default class DropdownContent extends React.Component<
     return this;
   };
 
-  public unbindTrigger = (trigger: DropdownTrigger): this => {
+  public unbindTrigger = (
+    trigger: DropdownTrigger,
+    unbindFromTarget: boolean = true
+  ): this => {
     let idx = this.triggers.indexOf(trigger);
 
     if (idx >= 0) {
-      this.triggers[idx].unbindDropdown(this);
+      const trigger = this.triggers[idx];
       this.triggers.splice(idx, 1);
+      unbindFromTarget && trigger.unbindDropdown(this);
     }
 
     return this;
@@ -144,7 +148,7 @@ export default class DropdownContent extends React.Component<
     this.unbindBodyEvents();
 
     this.triggers.forEach((trigger: DropdownTrigger) => {
-      trigger.unbindDropdown(this);
+      trigger.unbindDropdown(this, false);
     });
   }
 

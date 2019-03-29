@@ -50,7 +50,7 @@ export default class DropdownTrigger extends React.Component<
 
   public componentWillUnmount(): void {
     this.dropdowns.forEach((dropdown: DropdownContent) => {
-      dropdown.unbindTrigger(this);
+      dropdown.unbindTrigger(this, false);
     });
   }
 
@@ -69,12 +69,16 @@ export default class DropdownTrigger extends React.Component<
     return this;
   };
 
-  public unbindDropdown = (dropdown: DropdownContent): this => {
+  public unbindDropdown = (
+    dropdown: DropdownContent,
+    unbindFromTarget: boolean = true
+  ): this => {
     let idx = this.dropdowns.indexOf(dropdown);
 
     if (idx >= 0) {
-      this.dropdowns[idx].unbindTrigger(this);
+      const dropdown = this.dropdowns[idx];
       this.dropdowns.splice(idx, 1);
+      unbindFromTarget && dropdown.unbindTrigger(this);
     }
 
     return this;
