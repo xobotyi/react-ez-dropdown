@@ -65,5 +65,8 @@
     "preversion": "npm run format && npm run build",
     "postversion": "git push && git push --tags",
     "prepublishOnly": "npm run format && npm run test && npm run build"
+  },
+  "prettier": {
+    "printWidth": 120
   }
 }

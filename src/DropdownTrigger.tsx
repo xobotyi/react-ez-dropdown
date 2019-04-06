@@ -17,13 +17,9 @@ type DropdownTriggerState = {
   targetOpened: boolean;
 };
 
-export default class DropdownTrigger extends React.Component<
-  DropdownTriggerProps,
-  DropdownTriggerState
-> {
-  private dropdowns: DropdownContent[] = [];
-
+export default class DropdownTrigger extends React.Component<DropdownTriggerProps, DropdownTriggerState> {
   public element: HTMLDivElement | null;
+  private readonly dropdowns: DropdownContent[] = [];
 
   static propTypes = {
     triggerOnModifiedClick: PropTypes.bool,
@@ -34,7 +30,7 @@ export default class DropdownTrigger extends React.Component<
 
     onClick: PropTypes.func,
     elementRef: PropTypes.func
-  };
+  } as PropTypes.InferProps<DropdownTriggerProps>;
 
   constructor(props) {
     super(props);
@@ -69,10 +65,7 @@ export default class DropdownTrigger extends React.Component<
     return this;
   };
 
-  public unbindDropdown = (
-    dropdown: DropdownContent,
-    unbindFromTarget: boolean = true
-  ): this => {
+  public unbindDropdown = (dropdown: DropdownContent, unbindFromTarget: boolean = true): this => {
     let idx = this.dropdowns.indexOf(dropdown);
 
     if (idx >= 0) {

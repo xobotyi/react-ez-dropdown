@@ -22,25 +22,15 @@ type DropdownContentState = {
 };
 
 export const isModifiedEvent = (
-  event:
-    | KeyboardEvent
-    | MouseEvent
-    | TouchEvent
-    | React.MouseEvent
-    | React.TouchEvent
+  event: KeyboardEvent | MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent
 ): boolean => {
-  return Boolean(
-    event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
-  );
+  return Boolean(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 };
 
-export default class DropdownContent extends React.Component<
-  DropdownContentProps,
-  DropdownContentState
-> {
+export default class DropdownContent extends React.Component<DropdownContentProps, DropdownContentState> {
   public element: HTMLDivElement | null;
 
-  private triggers: DropdownTrigger[] = [];
+  private readonly triggers: DropdownTrigger[] = [];
 
   static propTypes = {
     elementRef: PropTypes.func,
@@ -55,7 +45,7 @@ export default class DropdownContent extends React.Component<
     removeWhenHidden: PropTypes.bool,
     closeOnOutsideClick: PropTypes.bool,
     closeOnEscKeypress: PropTypes.bool
-  };
+  } as PropTypes.InferProps<DropdownContentProps>;
 
   constructor(props) {
     super(props);
@@ -76,9 +66,7 @@ export default class DropdownContent extends React.Component<
   public componentDidMount(): void {
     this.state.opened && this.notifyTriggersOpenedState();
 
-    this.state.opened
-      ? this.props.onShow && this.props.onShow()
-      : this.props.onHide && this.props.onHide();
+    this.state.opened ? this.props.onShow && this.props.onShow() : this.props.onHide && this.props.onHide();
   }
 
   public componentDidUpdate(
@@ -86,32 +74,22 @@ export default class DropdownContent extends React.Component<
     prevState: Readonly<DropdownContentState>,
     snapshot?: any
   ): void {
-    if (
-      this.props.opened !== prevProps.opened &&
-      this.props.opened !== this.state.opened
-    ) {
+    if (this.props.opened !== prevProps.opened && this.props.opened !== this.state.opened) {
       this.setState({ opened: !!this.props.opened });
     }
 
-    if (
-      this.props.closeOnOutsideClick !== prevProps.closeOnOutsideClick ||
-      this.props.closeOnEscKeypress
-    ) {
+    if (this.props.closeOnOutsideClick !== prevProps.closeOnOutsideClick || this.props.closeOnEscKeypress) {
       this.unbindBodyEvents().bindBodyEvents();
     }
 
     if (prevState.opened !== this.state.opened) {
-      this.state.opened
-        ? this.props.onShow && this.props.onShow()
-        : this.props.onHide && this.props.onHide();
+      this.state.opened ? this.props.onShow && this.props.onShow() : this.props.onHide && this.props.onHide();
       this.notifyTriggersOpenedState();
     }
   }
 
   private notifyTriggersOpenedState = () => {
-    this.triggers.forEach(trigger =>
-      trigger.setTargetOpened(this.state.opened)
-    );
+    this.triggers.forEach(trigger => trigger.setTargetOpened(this.state.opened));
   };
 
   public bindTrigger = (trigger: DropdownTrigger): this => {
@@ -129,10 +107,7 @@ export default class DropdownContent extends React.Component<
     return this;
   };
 
-  public unbindTrigger = (
-    trigger: DropdownTrigger,
-    unbindFromTarget: boolean = true
-  ): this => {
+  public unbindTrigger = (trigger: DropdownTrigger, unbindFromTarget: boolean = true): this => {
     let idx = this.triggers.indexOf(trigger);
 
     if (idx >= 0) {
@@ -164,18 +139,12 @@ export default class DropdownContent extends React.Component<
 
   public bindBodyEvents = () => {
     if (this.props.closeOnOutsideClick) {
-      document.body.addEventListener("click", this.handleBodyClick, {
-        passive: true
-      });
-      document.body.addEventListener("touch", this.handleBodyClick, {
-        passive: true
-      });
+      document.body.addEventListener("click", this.handleBodyClick, { passive: true });
+      document.body.addEventListener("touch", this.handleBodyClick, { passive: true });
     }
 
     if (this.props.closeOnEscKeypress) {
-      document.body.addEventListener("keydown", this.handleBodyKeydown, {
-        passive: true
-      });
+      document.body.addEventListener("keydown", this.handleBodyKeydown, { passive: true });
     }
 
     return this;
@@ -200,13 +169,7 @@ export default class DropdownContent extends React.Component<
   };
 
   public toggle = (forced = null) => {
-    forced === null
-      ? this.state.opened
-        ? this.close()
-        : this.open()
-      : forced
-      ? this.open()
-      : this.close();
+    forced === null ? (this.state.opened ? this.close() : this.open()) : forced ? this.open() : this.close();
 
     return this;
   };
@@ -224,10 +187,7 @@ export default class DropdownContent extends React.Component<
     if (
       !this.props.closeOnOutsideClick ||
       this.triggers.some(
-        trigger =>
-          !!trigger.element &&
-          (trigger.element === ev.target ||
-            trigger.element.contains(ev.target as Node))
+        trigger => !!trigger.element && (trigger.element === ev.target || trigger.element.contains(ev.target as Node))
       )
     ) {
       return;
